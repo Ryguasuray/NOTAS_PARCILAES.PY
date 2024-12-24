@@ -27,29 +27,18 @@ class Estudiante:
             return 0
         return sum(notas_validas) / 3
 
-# Función para ingresar los datos de los profesores
+# Función para ingresar los datos de un profesor
 def ingresar_datos_profesor():
-    lista_profesores = []
-    nombres_ingresados = set()
-    while True:
-        nombre = input("Ingrese el nombre del profesor (o 'salir' para terminar): ")
-        if nombre.lower() == "salir":
-            break
-        apellido = input("Ingrese el apellido del profesor: ")
-        nombre_completo = f"{nombre} {apellido}"
-        if nombre_completo in nombres_ingresados:
-            print("Error: el dato ingresado ya fue cargado.")
-            continue
-        materia = input("Ingrese la materia que enseña el profesor: ")
-        codigo = input("Ingrese el código del profesor: ")
-        id = len(lista_profesores) + 1
-        profesor = Profesor(id, nombre, apellido, materia, codigo)
-        lista_profesores.append(profesor)
-        nombres_ingresados.add(nombre_completo)
-    return lista_profesores
+    nombre = input("Ingrese el nombre del profesor: ")
+    apellido = input("Ingrese el apellido del profesor: ")
+    materia = input("Ingrese la materia que enseña el profesor: ")
+    codigo = input("Ingrese el código del profesor: ")
+    profesor = Profesor(1, nombre, apellido, materia, codigo)
+    print(f"Bienvenido profesor {profesor.nombre} {profesor.apellido} de la materia {profesor.materia}")
+    return profesor
 
 # Función para ingresar los datos de los estudiantes
-def ingresar_datos_alumno(profesores):
+def ingresar_datos_alumno(profesor):
     lista_alumnos = []
     nombres_ingresados = set()
     while True:
@@ -61,19 +50,6 @@ def ingresar_datos_alumno(profesores):
         if nombre_completo in nombres_ingresados:
             print("Error: el dato ingresado ya fue cargado.")
             continue
-        print("Seleccione el profesor y la materia:")
-        for i, profesor in enumerate(profesores, start=1):
-            print(f"{i}. {profesor.nombre} {profesor.apellido} - {profesor.materia}")
-        while True:
-            try:
-                seleccion = int(input("Ingrese el número correspondiente al profesor: "))
-                if 1 <= seleccion <= len(profesores):
-                    profesor_seleccionado = profesores[seleccion - 1]
-                    break
-                else:
-                    print("Selección inválida. Por favor, ingrese un número válido.")
-            except ValueError:
-                print("Entrada inválida. Por favor, ingrese un número.")
         notas = []
         for i in range(1, 4):
             while True:
@@ -87,20 +63,10 @@ def ingresar_datos_alumno(profesores):
                 except ValueError:
                     print("Entrada inválida. Por favor, ingrese un número.")
         id = len(lista_alumnos) + 1
-        alumno = Estudiante(id, nombre, apellido, notas, profesor_seleccionado.materia, profesor_seleccionado)
+        alumno = Estudiante(id, nombre, apellido, notas, profesor.materia, profesor)
         lista_alumnos.append(alumno)
         nombres_ingresados.add(nombre_completo)
     return lista_alumnos
-
-# Función para dar la bienvenida al profesor
-def bienvenida_profesor(profesores):
-    codigo = input("Ingrese su código de profesor: ")
-    for profesor in profesores:
-        if profesor.codigo == codigo:
-            print(f"Bienvenido profesor {profesor.nombre} {profesor.apellido} de la materia {profesor.materia}")
-            return profesor
-    print("Código de profesor no encontrado. Error: Usuario no registrado.")
-    return None
 
 # Función para clasificar a los estudiantes según su rendimiento
 def clasificar_estudiantes(estudiantes):
@@ -129,27 +95,25 @@ def mostrar_listado(titulo, estudiantes):
 
 # Función principal
 def main():
-    profesores = ingresar_datos_profesor()
-    profesor_actual = bienvenida_profesor(profesores)
-    if profesor_actual:
-        estudiantes = ingresar_datos_alumno(profesores)
-        recursantes, finales, promocionados, ausentes, deben_recuperar = clasificar_estudiantes(estudiantes)
-        
-        mostrar_listado("Estudiantes que deben recursar", recursantes)
-        mostrar_listado("Estudiantes que deben rendir final", finales)
-        mostrar_listado("Estudiantes promocionados", promocionados)
-        mostrar_listado("Estudiantes ausentes", ausentes)
-        mostrar_listado("Estudiantes que deben recuperar", deben_recuperar)
+    profesor_actual = ingresar_datos_profesor()
+    estudiantes = ingresar_datos_alumno(profesor_actual)
+    recursantes, finales, promocionados, ausentes, deben_recuperar = clasificar_estudiantes(estudiantes)
+    
+    mostrar_listado("Estudiantes que deben recursar", recursantes)
+    mostrar_listado("Estudiantes que deben rendir final", finales)
+    mostrar_listado("Estudiantes promocionados", promocionados)
+    mostrar_listado("Estudiantes ausentes", ausentes)
+    mostrar_listado("Estudiantes que deben recuperar", deben_recuperar)
 
-        if promocionados:
-            print("\nAlumnos que promocionaron la materia con una nota mayor o igual a 7:")
-            for estudiante in promocionados:
-                print(f"{estudiante.nombre} {estudiante.apellido} - Promedio: {estudiante.promedio:.2f}")
+    if promocionados:
+        print("\nAlumnos que promocionaron la materia con una nota mayor o igual a 7:")
+        for estudiante in promocionados:
+            print(f"{estudiante.nombre} {estudiante.apellido} - Promedio: {estudiante.promedio:.2f}")
 
-        if ausentes:
-            print("\nAlumnos ausentes que deben recuperar:")
-            for estudiante in ausentes:
-                print(f"{estudiante.nombre} {estudiante.apellido} - Se ausentó y debe recuperar")
+    if ausentes:
+        print("\nAlumnos ausentes que deben recuperar:")
+        for estudiante in ausentes:
+            print(f"{estudiante.nombre} {estudiante.apellido} - Se ausentó y debe recuperar")
 
 if __name__ == "__main__":
     main()
