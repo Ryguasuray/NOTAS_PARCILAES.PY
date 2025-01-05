@@ -1,4 +1,4 @@
-# Clase que representa a un profesor
+# En esta sección se le solicita al profesor que ingrese sus datos como docente como asi tambien su id(seria su numero de matricula) donde se le solicita un codigo de ingreso para que sea mas sencillo.
 class Profesor:
     def __init__(self, id, nombre, apellido, materia, codigo):
         self.id = id
@@ -7,7 +7,7 @@ class Profesor:
         self.materia = materia
         self.codigo = codigo
 
-# Clase que representa a un estudiante
+# En esta sección se le solicita al profesor que ingrese los datos de cada alumno, como asi tambien se le solicita el ingreso de las notas de su parcial y si se ausento en el parcial.
 class Estudiante:
     def __init__(self, id, nombre, apellido, notas, materia, profesor):
         self.id = id
@@ -27,7 +27,7 @@ class Estudiante:
             return 0
         return sum(notas_validas) / 3
 
-# Función para ingresar los datos de un profesor
+# Esta es una Funcion para que el profsor pueda cargar su datos como nombres, y apellidos y la materia que esta enseñando.
 def ingresar_datos_profesor():
     nombre = input("Ingrese el nombre del profesor: ")
     apellido = input("Ingrese el apellido del profesor: ")
@@ -37,7 +37,7 @@ def ingresar_datos_profesor():
     print(f"Bienvenido profesor {profesor.nombre} {profesor.apellido} de la materia {profesor.materia}")
     return profesor
 
-# Función para ingresar los datos de los estudiantes
+# En esta seccion se le solicita al docente la carga de los datos de los alumnos , esta seccion es importante ya que en la misma se cargan las notas de los alumnos.
 def ingresar_datos_alumno(profesor):
     lista_alumnos = []
     nombres_ingresados = set()
@@ -68,7 +68,7 @@ def ingresar_datos_alumno(profesor):
         nombres_ingresados.add(nombre_completo)
     return lista_alumnos
 
-# Función para clasificar a los estudiantes según su rendimiento
+# En esta seccion se  calcula el rendimiento de los alumnos en la materia impartida por el profesor , y ademas clasifica a cada uno por su nivel de rendimiento.
 def clasificar_estudiantes(estudiantes):
     recursantes, finales, promocionados, ausentes, deben_recuperar = [], [], [], [], []
 
@@ -93,7 +93,7 @@ def mostrar_listado(titulo, estudiantes):
     for estudiante in sorted(estudiantes, key=lambda x: x.nombre):
         print(f"ID: {estudiante.id}, Nombre: {estudiante.nombre}, Apellido: {estudiante.apellido}, Materia: {estudiante.materia}, Profesor: {estudiante.profesor.nombre} {estudiante.profesor.apellido}, Notas: {estudiante.notas}, Promedio: {estudiante.promedio:.2f}, Debe recuperar: {'Sí' if estudiante.debe_recuperar else 'No'}")
 
-# Función principal
+# Esta es la funcion principal del programa donde se ejecutan todas las funciones anteriores. Es la seccion  mas importante de todo el programa ya que es la que se encarga de ejecutar todas las funciones anteriores.
 def main():
     profesor_actual = ingresar_datos_profesor()
     estudiantes = ingresar_datos_alumno(profesor_actual)
